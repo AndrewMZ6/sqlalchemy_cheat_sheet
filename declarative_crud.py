@@ -19,8 +19,8 @@ class Signal(Base):
         return f'Signal(id={self.id}, fftsize={self.fftsize}, modulation={self.modulation})'
 
 
-DB_URI = 'postgresql://postgres:123@localhost:5434/postgres'
-engine = create_engine(DB_URI, echo=True)
+DB_URI = 'postgresql://postgres:123@127.0.0.1:5434/postgres'
+engine = create_engine(DB_URI)
 
 
 Base.metadata.create_all(engine)
@@ -28,7 +28,9 @@ Base.metadata.create_all(engine)
 
 session = Session(engine)
 qam_signal = Signal(fftsize=1024, modulation='qam64')
-session.add(qam_signal)
+qpsk_signal = Signal(fftsize=127, modulation='qpsk')
+bpsk_signal = Signal(fftsize=2048, modulation='bpsk')
+session.add_all([qam_signal, qpsk_signal, bpsk_signal])
 session.commit()
 session.close()
 
